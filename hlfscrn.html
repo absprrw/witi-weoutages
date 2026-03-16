@@ -21,10 +21,6 @@
       overflow: hidden;
     }
 
-    body {
-      position: relative;
-    }
-
     .stage {
       position: relative;
       width: 100vw;
@@ -34,28 +30,28 @@
 
     .panel {
       position: absolute;
-      top: 0;
-      right: 0;
-      width: 34vw;
-      max-width: 720px;
+      top: 5vh;
+      right: 5vw;
+      bottom: 5vh;
+      width: 30vw;
       min-width: 420px;
-      height: 100vh;
+      max-width: 640px;
       background: #011049;
       color: #ffffff;
-      padding: clamp(22px, 2vw, 40px);
+      padding: clamp(20px, 1.8vw, 34px);
       display: flex;
       flex-direction: column;
     }
 
     .header {
       flex: 0 0 auto;
-      border-top: 10px solid #960000;
-      padding-top: 18px;
-      margin-bottom: 20px;
+      border-top: 8px solid #960000;
+      padding-top: 16px;
+      margin-bottom: 18px;
     }
 
     .title {
-      font-size: clamp(28px, 2.1vw, 46px);
+      font-size: clamp(26px, 1.9vw, 40px);
       font-weight: 700;
       line-height: 1;
       letter-spacing: 0.03em;
@@ -63,8 +59,8 @@
     }
 
     .total {
-      margin-top: 12px;
-      font-size: clamp(20px, 1.5vw, 30px);
+      margin-top: 10px;
+      font-size: clamp(18px, 1.3vw, 26px);
       font-weight: 600;
       line-height: 1.1;
       color: #ffb3b3;
@@ -76,9 +72,9 @@
       flex: 1 1 auto;
       display: flex;
       flex-direction: column;
-      justify-content: flex-start;
-      gap: clamp(10px, 0.9vw, 18px);
+      gap: clamp(10px, 0.8vw, 16px);
       min-height: 0;
+      overflow: hidden;
     }
 
     .row {
@@ -86,20 +82,20 @@
       justify-content: space-between;
       align-items: baseline;
       gap: 16px;
-      padding-bottom: 8px;
-      border-bottom: 2px solid rgba(150, 0, 0, 0.5);
+      padding-bottom: 6px;
+      border-bottom: 2px solid rgba(150, 0, 0, 0.45);
     }
 
     .county {
       min-width: 0;
-      font-size: clamp(22px, 1.7vw, 36px);
+      font-size: clamp(20px, 1.5vw, 32px);
       font-weight: 600;
       line-height: 1.05;
     }
 
     .value {
       flex: 0 0 auto;
-      font-size: clamp(24px, 1.9vw, 38px);
+      font-size: clamp(22px, 1.7vw, 34px);
       font-weight: 700;
       line-height: 1;
       white-space: nowrap;
@@ -111,10 +107,10 @@
     .error {
       position: absolute;
       top: 50%;
-      right: 17vw;
+      right: 20vw;
       transform: translate(50%, -50%);
       color: #ffffff;
-      font-size: 30px;
+      font-size: 28px;
       font-weight: 700;
     }
 
@@ -122,10 +118,20 @@
       color: #ffb4b4;
     }
 
+    @media (max-width: 1400px) {
+      .panel {
+        width: 32vw;
+        min-width: 380px;
+      }
+    }
+
     @media (max-width: 1100px) {
       .panel {
-        width: 42vw;
-        min-width: 360px;
+        top: 4vh;
+        right: 4vw;
+        bottom: 4vh;
+        width: 36vw;
+        min-width: 340px;
       }
     }
   </style>
@@ -178,8 +184,9 @@
         </div>
       `;
 
-      document.getElementById("content").className = "";
-      document.getElementById("content").innerHTML = html;
+      const content = document.getElementById("content");
+      content.className = "";
+      content.innerHTML = html;
     }
 
     function renderError(message) {
