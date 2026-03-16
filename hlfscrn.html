@@ -1,243 +1,257 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
 
-  <style>
-    *,
-    *::before,
-    *::after {
-      box-sizing: border-box;
-    }
+<style>
 
-    html, body {
-      margin: 0;
-      padding: 0;
-      width: 100%;
-      height: 100%;
-      background: #00ff00;
-      font-family: 'Montserrat', sans-serif;
-      overflow: hidden;
-    }
+*,*::before,*::after{
+box-sizing:border-box;
+}
 
-    .stage {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      background: #00ff00;
-    }
+html,body{
+margin:0;
+padding:0;
+width:100%;
+height:100%;
+background:#00ff00;
+font-family:'Montserrat',sans-serif;
+overflow:hidden;
+}
 
-    .panel {
-      position: absolute;
-      top: 7vh;
-      right: 7vw;
-      bottom: 7vh;
-      width: 30vw;
-      min-width: 420px;
-      max-width: 640px;
-      background: #011049;
-      color: #ffffff;
-      padding: clamp(20px, 1.8vw, 34px);
-      display: flex;
-      flex-direction: column;
-    }
+.stage{
+position:relative;
+width:100vw;
+height:100vh;
+background:#00ff00;
+}
 
-    .header {
-      flex: 0 0 auto;
-      border-top: 8px solid #960000;
-      padding-top: 16px;
-      margin-bottom: 18px;
-    }
+/* BLUE PANEL (FULL HEIGHT EDGE) */
 
-    .title {
-      font-size: clamp(26px, 1.9vw, 40px);
-      font-weight: 700;
-      line-height: 1;
-      letter-spacing: 0.03em;
-      text-transform: uppercase;
-    }
+.panel{
+position:absolute;
+top:0;
+right:0;
+height:100vh;
+width:30vw;
+min-width:420px;
+max-width:680px;
+background:#011049;
+color:#ffffff;
+display:flex;
+flex-direction:column;
+}
 
-    .total {
-      margin-top: 10px;
-      font-size: clamp(18px, 1.3vw, 26px);
-      font-weight: 600;
-      line-height: 1.1;
-      color: #ffb3b3;
-      font-variant-numeric: tabular-nums;
-      font-feature-settings: "tnum";
-    }
+/* TITLE SAFE CONTENT AREA */
 
-    .list {
-      flex: 1 1 auto;
-      display: flex;
-      flex-direction: column;
-      gap: clamp(10px, 0.8vw, 16px);
-      min-height: 0;
-      overflow: hidden;
-    }
+.panelInner{
+padding:
+clamp(40px,5vh,90px)
+clamp(40px,4vw,80px)
+clamp(40px,5vh,90px)
+clamp(40px,4vw,80px);
+display:flex;
+flex-direction:column;
+height:100%;
+}
 
-    .row {
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 16px;
-      padding-bottom: 6px;
-      border-bottom: 2px solid rgba(150, 0, 0, 0.45);
-    }
+/* HEADER */
 
-    .county {
-      min-width: 0;
-      font-size: clamp(20px, 1.5vw, 32px);
-      font-weight: 600;
-      line-height: 1.05;
-    }
+.header{
+border-top:8px solid #960000;
+padding-top:18px;
+margin-bottom:22px;
+}
 
-    .value {
-      flex: 0 0 auto;
-      font-size: clamp(22px, 1.7vw, 34px);
-      font-weight: 700;
-      line-height: 1;
-      white-space: nowrap;
-      font-variant-numeric: tabular-nums;
-      font-feature-settings: "tnum";
-    }
+.title{
+font-size:clamp(28px,2vw,42px);
+font-weight:700;
+line-height:1;
+letter-spacing:.03em;
+text-transform:uppercase;
+}
 
-    .loading,
-    .error {
-      position: absolute;
-      top: 50%;
-      right: 20vw;
-      transform: translate(50%, -50%);
-      color: #ffffff;
-      font-size: 28px;
-      font-weight: 700;
-    }
+.total{
+margin-top:10px;
+font-size:clamp(20px,1.4vw,28px);
+font-weight:600;
+color:#ffb3b3;
+font-variant-numeric:tabular-nums;
+}
 
-    .error {
-      color: #ffb4b4;
-    }
+/* COUNTY LIST */
 
-    @media (max-width: 1400px) {
-      .panel {
-        width: 32vw;
-        min-width: 380px;
-      }
-    }
+.list{
+display:flex;
+flex-direction:column;
+gap:clamp(10px,.8vw,16px);
+flex:1;
+}
 
-    @media (max-width: 1100px) {
-      .panel {
-        top: 4vh;
-        right: 4vw;
-        bottom: 4vh;
-        width: 36vw;
-        min-width: 340px;
-      }
-    }
-  </style>
+.row{
+display:flex;
+justify-content:space-between;
+align-items:baseline;
+padding-bottom:6px;
+border-bottom:2px solid rgba(150,0,0,.45);
+}
+
+.county{
+font-size:clamp(22px,1.6vw,34px);
+font-weight:600;
+}
+
+.value{
+font-size:clamp(24px,1.8vw,36px);
+font-weight:700;
+white-space:nowrap;
+font-variant-numeric:tabular-nums;
+}
+
+/* LOADING */
+
+.loading,.error{
+position:absolute;
+top:50%;
+right:15vw;
+transform:translate(50%,-50%);
+font-size:28px;
+font-weight:700;
+color:white;
+}
+
+.error{
+color:#ffb4b4;
+}
+
+</style>
 </head>
 
 <body>
-  <div class="stage">
-    <div id="content" class="loading">Loading outages...</div>
-  </div>
 
-  <script>
-    const SOURCE_URL = "https://witi-weoutages.schmidtya327.workers.dev/";
+<div class="stage">
+<div id="content" class="loading">Loading outages...</div>
+</div>
 
-    const TARGET_COUNTIES = [
-      "milwaukee",
-      "waukesha",
-      "ozaukee",
-      "washington",
-      "racine",
-      "kenosha",
-      "walworth",
-      "dodge",
-      "jefferson",
-      "fond du lac",
-      "sheboygan"
-    ];
+<script>
 
-    function formatNumber(value) {
-      return Number(value || 0).toLocaleString("en-US");
-    }
+const SOURCE_URL="https://witi-weoutages.schmidtya327.workers.dev/";
 
-    function render(data) {
-      const rows = data.counties.map(county => `
-        <div class="row">
-          <div class="county">${county.label}</div>
-          <div class="value">${formatNumber(county.affected)}</div>
-        </div>
-      `).join("");
+const TARGET_COUNTIES=[
+"milwaukee",
+"waukesha",
+"ozaukee",
+"washington",
+"racine",
+"kenosha",
+"walworth",
+"dodge",
+"jefferson",
+"fond du lac",
+"sheboygan"
+];
 
-      const html = `
-        <div class="panel">
-          <div class="header">
-            <div class="title">WE Energies Outages</div>
-            <div class="total">${formatNumber(data.totalCustomersOut)} Customers Out</div>
-          </div>
+function formatNumber(v){
+return Number(v||0).toLocaleString("en-US");
+}
 
-          <div class="list">
-            ${rows}
-          </div>
-        </div>
-      `;
+function render(data){
 
-      const content = document.getElementById("content");
-      content.className = "";
-      content.innerHTML = html;
-    }
+const rows=data.counties.map(c=>`
+<div class="row">
+<div class="county">${c.label}</div>
+<div class="value">${formatNumber(c.affected)}</div>
+</div>
+`).join("");
 
-    function renderError(message) {
-      const content = document.getElementById("content");
-      content.className = "error";
-      content.textContent = message || "Unable to load data";
-    }
+const html=`
 
-    async function loadData() {
-      try {
-        const response = await fetch(SOURCE_URL);
-        const raw = await response.json();
+<div class="panel">
 
-        const countyTotals = {};
-        TARGET_COUNTIES.forEach(c => countyTotals[c] = 0);
+<div class="panelInner">
 
-        let totalCustomersOut = 0;
+<div class="header">
+<div class="title">WE Energies Outages</div>
+<div class="total">${formatNumber(data.totalCustomersOut)} Customers Out</div>
+</div>
 
-        raw.forEach(outage => {
-          (outage.Slices || []).forEach(slice => {
-            const county = (slice.County || "").toLowerCase().trim();
-            const affected = Number(slice.AffectedCusts || 0);
+<div class="list">
+${rows}
+</div>
 
-            totalCustomersOut += affected;
+</div>
 
-            if (countyTotals.hasOwnProperty(county)) {
-              countyTotals[county] += affected;
-            }
-          });
-        });
+</div>
 
-        const counties = Object.keys(countyTotals)
-          .map(c => ({
-            label: c.replace(/\b\w/g, l => l.toUpperCase()) + " County",
-            affected: countyTotals[c]
-          }))
-          .sort((a, b) => b.affected - a.affected);
+`;
 
-        render({
-          totalCustomersOut,
-          counties
-        });
-      } catch (e) {
-        renderError("Unable to load data");
-        console.error(e);
-      }
-    }
+document.getElementById("content").className="";
+document.getElementById("content").innerHTML=html;
 
-    loadData();
-    setInterval(loadData, 600000);
-    setInterval(() => location.reload(), 700000);
-  </script>
+}
+
+function renderError(msg){
+const el=document.getElementById("content");
+el.className="error";
+el.textContent=msg||"Unable to load data";
+}
+
+async function loadData(){
+
+try{
+
+const response=await fetch(SOURCE_URL);
+const raw=await response.json();
+
+const countyTotals={};
+TARGET_COUNTIES.forEach(c=>countyTotals[c]=0);
+
+let totalCustomersOut=0;
+
+raw.forEach(outage=>{
+
+(outage.Slices||[]).forEach(slice=>{
+
+const county=(slice.County||"").toLowerCase().trim();
+const affected=Number(slice.AffectedCusts||0);
+
+totalCustomersOut+=affected;
+
+if(countyTotals.hasOwnProperty(county)){
+countyTotals[county]+=affected;
+}
+
+});
+
+});
+
+const counties=Object.keys(countyTotals)
+.map(c=>({
+label:c.replace(/\b\w/g,l=>l.toUpperCase())+" County",
+affected:countyTotals[c]
+}))
+.sort((a,b)=>b.affected-a.affected);
+
+render({
+totalCustomersOut,
+counties
+});
+
+}catch(e){
+
+renderError("Unable to load data");
+console.error(e);
+
+}
+
+}
+
+loadData();
+setInterval(loadData,600000);
+setInterval(()=>location.reload(),700000);
+
+</script>
+
 </body>
 </html>
