@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+html, body{
+margin:0;
+padding:0;
+width:100%;
+height:100%;
+background:#00ff00;
+font-family:'Montserrat',sans-serif;
+color:#ffffff;
+overflow:hidden;
+}
+
+/* RIGHT SIDE PANEL */
+
+.panel{
+position:absolute;
+top:0;
+right:0;
+height:100%;
+width:34%;
+background:#011049;
+display:flex;
+flex-direction:column;
+padding:clamp(20px,2vw,40px);
+box-sizing:border-box;
+}
+
+/* RED ACCENT BAR */
+
+.header{
+border-bottom:6px solid #960000;
+padding-bottom:14px;
+margin-bottom:18px;
+}
+
+.title{
+font-size:clamp(28px,2.2vw,48px);
+font-weight:700;
+text-transform:uppercase;
+letter-spacing:.04em;
+line-height:1;
+}
+
+.total{
+font-size:clamp(20px,1.6vw,36px);
+font-weight:600;
+margin-top:8px;
+color:#ffb6b6;
+}
+
+/* COUNTY LIST */
+
+.list{
+display:flex;
+flex-direction:column;
+gap:12px;
+flex:1;
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+align-items:center;
+font-size:clamp(22px,1.8vw,40px);
+font-weight:600;
+padding-bottom:6px;
+border-bottom:2px solid rgba(150,0,0,.4);
+}
+
+.county{
+opacity:.95;
+}
+
+.value{
+font-weight:700;
+}
+
+.loading{
+position:absolute;
+top:50%;
+right:17%;
+transform:translate(50%,-50%);
+font-size:32px;
+color:white;
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="content" class="loading">Loading outages...</div>
+
+<script>
+
+const SOURCE_URL="https://witi-weoutages.schmidtya327.workers.dev/";
+
+const TARGET_COUNTIES=[
+"milwaukee",
+"waukesha",
+"ozaukee",
+"washington",
+"racine",
+"kenosha",
+"walworth",
+"dodge",
+"jefferson",
+"fond du lac",
+"sheboygan"
+];
+
+function formatNumber(v){
+return Number(v||0).toLocaleString("en-US");
+}
+
+function render(data){
+
+const rows=data.counties.map(c=>`
+<div class="row">
+<div class="county">${c.label}</div>
+<div class="value">${formatNumber(c.affected)}</div>
+</div>
+`).join("");
+
+const html=`
+
+<div class="panel">
+
+<div class="header">
+<div class="title">WE Energies Outages</div>
+<div class="total">${formatNumber(data.totalCustomersOut)} Customers Out</div>
+</div>
+
+<div class="list">
+${rows}
+</div>
+
+</div>
+
+`;
+
+document.getElementById("content").innerHTML=html;
+
+}
+
+async function loadData(){
+
+try{
+
+const response=await fetch(SOURCE_URL);
+const raw=await response.json();
+
+const countyTotals={};
+TARGET_COUNTIES.forEach(c=>countyTotals[c]=0);
+
+let totalCustomersOut=0;
+
+raw.forEach(outage=>{
+
+(outage.Slices||[]).forEach(slice=>{
+
+const county=(slice.County||"").toLowerCase().trim();
+const affected=Number(slice.AffectedCusts||0);
+
+totalCustomersOut+=affected;
+
+if(countyTotals.hasOwnProperty(county)){
+countyTotals[county]+=affected;
+}
+
+});
+
+});
+
+const counties=Object.keys(countyTotals)
+.map(c=>({
+label:c.replace(/\b\w/g,l=>l.toUpperCase())+" County",
+affected:countyTotals[c]
+}))
+.sort((a,b)=>b.affected-a.affected);
+
+render({
+totalCustomersOut,
+counties
+});
+
+}catch(e){
+
+document.getElementById("content").innerText="Unable to load data";
+console.error(e);
+
+}
+
+}
+
+loadData();
+
+setInterval(loadData,600000);
+setInterval(()=>location.reload(),700000);
+
+</script>
+
+</body>
+</html>
