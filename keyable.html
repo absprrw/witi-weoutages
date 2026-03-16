@@ -288,11 +288,12 @@
           });
 
           const counties = Object.keys(countyTotals)
-            .map(c => ({
-              label: c.replace(/\b\w/g, l => l.toUpperCase()) + " County",
-              affected: countyTotals[c]
-            }))
-            .sort((a, b) => b.affected - a.affected);
+  .map(c => ({
+    label: c.replace(/\b\w/g, l => l.toUpperCase()) + " County",
+    affected: countyTotals[c]
+  }))
+  .filter(c => c.affected > 0)
+  .sort((a, b) => b.affected - a.affected);
 
           render({
             updatedAt: new Date(),
