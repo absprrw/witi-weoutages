@@ -340,11 +340,27 @@ document.getElementById("content").innerText =
 
 loadData();
 
-// refresh outage data every 10 minutes
-setInterval(loadData,300000);
+// Schedule a callback to fire at the next xx:x1 mark (every 10 min, on the :01/:11/:21/:31/:41/:51)
+function scheduleAtNext1(callback) {
+  const now = new Date();
+  const seconds = now.getSeconds();
+  const minuteDigit = now.getMinutes() % 10;
 
-// full reload every 10 minutes
-setInterval(()=>location.reload(),300000);
+  // Minutes until the next one ending in 1
+  const minutesUntilNext1 = minuteDigit < 1 ? (1 - minuteDigit) : (11 - minuteDigit);
+
+  // Subtract elapsed seconds in the current minute
+  const msUntilNext = (minutesUntilNext1 * 60 - seconds) * 1000;
+
+  setTimeout(() => {
+    callback();
+    setInterval(callback, 10 * 60 * 1000); // then every 10 min exactly
+  }, msUntilNext);
+}
+
+scheduleAtNext1(loadData);
+scheduleAtNext1(() => location.reload());
+
 
 </script>
 
