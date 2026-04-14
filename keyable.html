@@ -307,13 +307,27 @@
         }
       }
 
-      loadData();
+      lloadData();
 
-      setInterval(loadData, 600000);
+// Schedule a callback to fire at the next xx:x2 mark - Pads for the JSON to update on backend - (every 10 min, on the :02/:12/:22/:32/:42/:52)
+function scheduleAtNext1(callback) {
+  const now = new Date();
+  const seconds = now.getSeconds();
+  const minuteDigit = now.getMinutes() % 10;
 
-      setInterval(function() {
-        location.reload();
-      }, 700000);
+  // Minutes until the next one ending in 2
+  const minutesUntilNext1 = minuteDigit < 2 ? (2 - minuteDigit) : (12 - minuteDigit);
+
+  // Subtract elapsed seconds in the current minute
+  const msUntilNext = (minutesUntilNext1 * 60 - seconds) * 1000;
+
+  setTimeout(() => {
+    callback();
+    setInterval(callback, 10 * 60 * 1000); // then every 10 min exactly
+  }, msUntilNext);
+}
+
+scheduleAtNext1(loadData);
     </script>
   </body>
 </html>
