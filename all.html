@@ -214,7 +214,7 @@ white-space:normal;
 
 <div class="topbar">
 <div class="brandBlock">
-<div class="title">WE Energies Outages</div>
+<div class="title">WE Energies Outages - Wisconsin</div>
 </div>
 <div class="timestamp" id="timestamp">Loading...</div>
 </div>
@@ -339,7 +339,7 @@ return counties.map(county=> county ? `
 const html = `
 
 <div class="totalBar">
-<div class="totalLabel">WE Energies Customers Out</div>
+<div class="totalLabel">Total WE Energies Customers Out</div>
 <div class="totalValue">${formatNumber(data.totalCustomersOut)}</div>
 </div>
 
@@ -364,6 +364,8 @@ const raw = await response.json();
 const countyTotals = {};
 TARGET_COUNTIES.forEach(c => countyTotals[c.toLowerCase()]=0);
 
+let totalCustomersOut = 0;
+
 raw.forEach(outage=>{
 
 const slices = outage.Slices || [];
@@ -372,6 +374,8 @@ slices.forEach(slice=>{
 
 const county = (slice.County||"").toLowerCase().trim();
 const affected = Number(slice.AffectedCusts||0);
+
+totalCustomersOut += affected;
 
 if(countyTotals.hasOwnProperty(county)){
 countyTotals[county] += affected;
@@ -388,8 +392,6 @@ const counties = Object.keys(countyTotals)
   }))
   .filter(c => c.affected > 0)
   .sort((a, b) => b.affected - a.affected);
-
-const totalCustomersOut = counties.reduce((sum,c) => sum + c.affected, 0);
 
 render({
 updatedAt:new Date(),
