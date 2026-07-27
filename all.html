@@ -23,7 +23,7 @@ font-family:'Montserrat',sans-serif;
 box-sizing:border-box;
 width:100%;
 height:100vh;
-padding:clamp(14px,2.4vh,40px) clamp(20px,4vw,80px);
+padding:clamp(24px,10vh,120px) clamp(32px,10vw,160px);
 display:flex;
 flex-direction:column;
 background:linear-gradient(180deg,#02135c 0%,#011049 100%);
@@ -137,7 +137,7 @@ overflow:hidden;
 }
 
 .countyName{
-font-size:clamp(11px,30cqh,38px);
+font-size:clamp(11px,26cqh,34px);
 font-weight:600;
 line-height:1.08;
 padding-right:10px;
@@ -238,19 +238,16 @@ const TARGET_COUNTIES = [
 "Columbia",
 "Crawford",
 "Dane",
-"Dickinson",
 "Dodge",
 "Dunn",
 "Eau Claire",
 "Florence",
 "Fond du Lac",
 "Forest",
-"Gogebic",
 "Grant",
 "Green",
 "Green Lake",
 "Iowa",
-"Iron",
 "Jackson",
 "Jefferson",
 "Kenosha",
@@ -263,12 +260,10 @@ const TARGET_COUNTIES = [
 "Marathon",
 "Marinette",
 "Marquette",
-"Menominee",
 "Milwaukee",
 "Monroe",
 "Oconto",
 "Oneida",
-"Ontonagon",
 "Outagamie",
 "Ozaukee",
 "Pepin",
@@ -369,8 +364,6 @@ const raw = await response.json();
 const countyTotals = {};
 TARGET_COUNTIES.forEach(c => countyTotals[c.toLowerCase()]=0);
 
-let totalCustomersOut = 0;
-
 raw.forEach(outage=>{
 
 const slices = outage.Slices || [];
@@ -380,8 +373,6 @@ slices.forEach(slice=>{
 const county = (slice.County||"").toLowerCase().trim();
 const affected = Number(slice.AffectedCusts||0);
 
-totalCustomersOut += affected;
-
 if(countyTotals.hasOwnProperty(county)){
 countyTotals[county] += affected;
 }
@@ -390,15 +381,15 @@ countyTotals[county] += affected;
 
 });
 
-const MICHIGAN_COUNTIES = ["gogebic","iron","dickinson","menominee","ontonagon"];
-
 const counties = Object.keys(countyTotals)
   .map(c => ({
-    label: c.replace(/\b\w/g, l => l.toUpperCase()) + " County" + (MICHIGAN_COUNTIES.includes(c) ? " (MI)" : ""),
+    label: c.replace(/\b\w/g, l => l.toUpperCase()) + " County",
     affected: countyTotals[c]
   }))
   .filter(c => c.affected > 0)
   .sort((a, b) => b.affected - a.affected);
+
+const totalCustomersOut = counties.reduce((sum,c) => sum + c.affected, 0);
 
 render({
 updatedAt:new Date(),
